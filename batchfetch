@@ -1,0 +1,101 @@
+@echo off
+title BATCHFETCH - by lightedits99
+
+ver | find "10.0.2" > nul
+if %ERRORLEVEL%==0 goto neofetch
+ver | find "10.0.1" > nul
+if %ERRORLEVEL%==0 goto neofetch
+ver | find "6.3" > nul
+if %ERRORLEVEL%==0 goto neoerror
+ver | find "6.2" > nul
+if %ERRORLEVEL%==0 goto neoerror
+ver | find "6.1" > nul
+if %ERRORLEVEL%==0 goto neoerror
+ver | find "6.0" > nul
+if %ERRORLEVEL%==0 goto neoerror
+ver | find "5.2" > nul
+if %ERRORLEVEL%==0 goto neoerror
+ver | find "5.1" > nul
+if %ERRORLEVEL%==0 goto neoerror
+ver | find "4.10" > nul
+if %ERRORLEVEL%==0 goto neoerror
+
+:neoerror
+echo Surumun uyumlu degil. Windows 10 veya 11 kullanmalisin.
+pause
+exit
+
+:neofetch
+for /f %%P in ('wmic cpu get name ^| findstr /v "Name" ^| findstr /v /r /b "$"') do (
+set CPU=%%P
+)
+for /f "tokens=*" %%P in ('wmic computersystem get model ^| findstr /v "Model" ^| findstr /v /r /b "$"') do (
+set Model=%%P
+)
+for /f "tokens=*" %%P in ('wmic os get caption ^| findstr /v "Caption" ^| findstr /v /r /b "$"') do (
+set OSVersion=%%P
+)
+for /f "tokens=*" %%P in (' wmic path Win32_OperatingSystem get LastBootUpTime ^| findstr /v "Boot" ^| findstr /v /r /b "$"') do (
+set Uptime=%%P
+)
+for /f "delims=" %%# in  ('"wmic path Win32_VideoController  get CurrentHorizontalResolution,CurrentVerticalResolution /format:value"') do (
+set "%%#">nul
+)
+for /F "tokens=2 delims='='" %%A in ('wmic cpu get NumberOfCores /value') do set cpucore=%%A
+
+ver | find "10.0.2" > nul
+if %ERRORLEVEL%==0 goto 11
+ver | find "10.0.1" > nul
+if %ERRORLEVEL%==0 goto 10
+
+:11
+echo.
+echo.
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       [94m%username%[0m@[94m%ComputerName%[0m
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       ------------
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       [92mOS[0m: -%OSVersion%
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       [92mHost[0m: -%Model%
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       [92mResolution[0m: -%CurrentHorizontalResolution%x%CurrentVerticalResolution%
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       [92mTerminal[0m: -CMD / Powershell
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       [92mCPU[0m: %CPU% (%cpucore% Core)
+echo.
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m          
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m 
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m
+echo [94mMMMMMMMMMMMMMM  MMMMMMMMMMMMMM[0m       
+echo.
+echo.
+pause
+exit
+
+:10
+@echo off
+echo.
+echo.
+echo                             [92m......______[0m		[94m%username%[0m@[94m%ComputerName%[0m
+echo               [91m..[0m   [92m._____//////////////_[0m		------------
+echo [91m......_____/////[0m   [92m////////////////////_[0m		[92mOS[0m: -%OSVersion%
+echo [91m////////////////[0m   [92m////////////////////_[0m  	        [92mHost[0m: -%Model%
+echo [91m////////////////[0m   [92m////////////////////_[0m		[92mResolution[0m: -%CurrentHorizontalResolution%x%CurrentVerticalResolution%
+echo [91m////////////////[0m   [92m////////////////////_[0m                [92mTerminal[0m: -CMD / Powershell
+echo [91m////////////////[0m   [92m////////////////////_[0m                [92mCPU[0m: %CPU% (%cpucore% Core)
+echo [91m////////////////[0m   [92m////////////////////_[0m                
+echo [91m////////////////[0m   [92m////////////////////_[0m                 
+echo.                                                        
+echo.
+echo [96m////////////////[0m   [93m////////////////////_[0m
+echo [96m////////////////[0m   [93m////////////////////_[0m
+echo [96m////////////////[0m   [93m////////////////////_[0m
+echo [96m////////////////[0m   [93m////////////////////_[0m
+echo [96m////////////////[0m   [93m////////////////////_[0m
+echo [96m////////////////[0m   [93m////////////////////_[0m
+echo [96m......_____/////[0m   [93m////////////////////_[0m
+echo               [96m..[0m   [93m.._____/////////////_[0m
+echo                              [93m......_____[0m
+echo.
+echo.
+pause
+exit
